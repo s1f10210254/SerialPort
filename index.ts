@@ -21,8 +21,8 @@ let direction = SEITEN;
 
 
 
-const data = Buffer.from([speed << 2 | 0 << 1 | direction])
-const data1 = Buffer.from([speed << 2| 1 << 1 | direction])
+// const data = Buffer.from([speed << 2 | 0 << 1 | direction])
+// const data1 = Buffer.from([speed << 2| 1 << 1 | direction])
 // const data = (speed << 2) | (moterType << 1) | direction
 // const data = `${String.fromCharCode(speed)}${String.fromCharCode(moterType)}${String.fromCharCode(direction)}`;
 // const data1 = data.toString()
@@ -32,6 +32,8 @@ let flag = true
 
 
 const run=()=>{
+    const data = Buffer.from([speed << 2 | 0 << 1 | direction])
+
     port.write(data, function(err){
         if(err){
             return console.log('送信失敗',err.message);
@@ -41,7 +43,8 @@ const run=()=>{
 }
 
 const run1 =()=>{
-    port.write(data1, function(err){
+    const data = Buffer.from([speed << 2| 1 << 1 | direction])
+    port.write(data, function(err){
         if(err){
             return console.log('送信失敗',err.message);
         }
@@ -49,6 +52,10 @@ const run1 =()=>{
     })
 }
 
+const stop = ()=>{
+    const data = Buffer.from([speed << 0 | 0 << 1 | direction])
+
+}
 const turnRight = ()=>{
     const data = Buffer.from([speed << 2 | 1 << 1 | direction] )
     port.write(data, function(err){
@@ -58,8 +65,8 @@ const turnRight = ()=>{
         console.log("turnRight送信成功");
     })
 }
-console.log("data",data)
-console.log("data1",data1);
+// console.log("data",data)
+// console.log("data1",data1);
 
 let counter = 0;
 port.on('open', function() {
@@ -71,10 +78,10 @@ port.on('open', function() {
     //     run1()
     // },1000)
 
-    setTimeout(()=>{
-        run();
-        run1();
-    },1000)
+    // setTimeout(()=>{
+    //     run();
+    //     run1();
+    // },1000)
     
 
     
