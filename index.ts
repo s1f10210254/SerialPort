@@ -3,7 +3,7 @@ import {SerialPort} from 'serialport';
 const path = "COM3"
 const port = new SerialPort({path, baudRate: 9600});
 
-const speed = 3;
+const speed = 1;
 const LEFT = 0;
 const RIGHT = 1;
 const SEITEN = 0;
@@ -11,7 +11,7 @@ const HANTEN = 1;
 
 
 const moterType = LEFT;
-const direction = SEITEN
+const direction = HANTEN
 
 const data = Buffer.from([speed << 2 | moterType << 1 | direction])
 // const data = (speed << 2) | (moterType << 1) | direction
@@ -20,7 +20,7 @@ const data = Buffer.from([speed << 2 | moterType << 1 | direction])
 // const data = Buffer.from([speed, moterType, direction]);
 
 
-// console.log("data",data)
+console.log("data",data)
 
 port.on('open', function() {
     console.log('ポートが開いた');
