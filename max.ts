@@ -1,35 +1,53 @@
-var { SerialPort } = require("serialport");
-var port = new SerialPort({ path: 'COM3', baudRate: 9600 });
+import { SerialPort } from "serialport";
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 });
 
 const commands = [
-    { duration: 0, left: 1, right: 1 },
-    { duration: 1, left: 1, right: 0 },
-    { duration: 1.5, left: 1, right: 1 },
-    { duration: 1, left: 1, right: 0 },
-    { duration: 1.5, left: 1, right: 1 },
-    { duration: 1, left: 1, right: 0 },
-    { duration: 1.5, left: 1, right: 1 },
-    { duration: 1, left: 0, right: 1 },
-    { duration: 1.5, left: 1, right: 1 },
-    { duration: 1, left: 0, right: 1 },
-    { duration: 1.5, left: 1, right: 1 },
-    { duration: 1, left: 0, right: 1 },
-    { duration: 1.5, left: 1, right: 1 },
-    { duration: 1, left: 1, right: 0 },
-    { duration: 1.5, left: 1, right: 1 },
+    { duration: 0, left: 1, right: 1, direction:0 }, //前
+    { duration: 1, left: 1, right: 0 ,direction:0}, //右
+    { duration: 1.5, left: 1, right: 1, direction:0 }, //まっすぐ
+    { duration: 1, left: 1, right: 0 , direction:0}, //右
+    { duration: 1.5, left: 1, right: 1 ,direction:0}, //まっすぐ
+    { duration: 1, left: 1, right: 0 ,direction:0}, //右
+    { duration: 1.5, left: 1, right: 1 ,direction:0},//まっすぐ
+    { duration: 1, left: 0, right: 1 ,direction:0}, //左
+    { duration: 1.5, left: 1, right: 1,direction:0 }, //まっすぐ
+    { duration: 1, left: 0, right: 1 ,direction:0}, //左
+    { duration: 1.5, left: 1, right: 1 ,direction:0}, //まっすぐ
+    { duration: 1, left: 0, right: 1 ,direction:0}, //左
+    { duration: 1.5, left: 1, right: 1 ,direction:0}, //まっすぐ
+    { duration: 1, left: 1, right: 0 ,direction:0}, //右
+    { duration: 1.5, left: 1, right: 1,direction:0 }, //まっすぐ
 ]
+
+// const commands = [
+//     {duration:12,left:0,right:1},
+//     {duration:12,left:1,right:0}
+// ]
 
 port.on('open', function() {
     console.log('ポートが開いた');
     
     const fn = (n:number) => {
+        //n番目の操作
         const command = commands[n % commands.length]
         const leftSpeed = 5 * command.left << 2
         const rightSpeed = 5 * command.right << 2
         const leftMotor = 1 << 1
         const rightMotor = 0 << 1
-        const leftDirection = 1
-        const rightDirection = 1
+        const leftDirection = command.direction
+        const rightDirection = command.direction
+
+        
+        // const command = commands[n % commands.length]
+        // const leftSpeed = 10 * command.left << 2
+        // const rightSpeed = 10 * command.right <<2
+        // const leftMotor = 1 << 1
+        // const rightMotor = 0 <<1
+        // const leftDirection = 1;
+        // const rightDirection = 1;
+
+
+
 
         port.write(Buffer.from([leftSpeed | leftMotor | leftDirection]), function(err){
             if(err){
@@ -50,7 +68,7 @@ port.on('open', function() {
 
     fn(0)
 
-    var text = ''
+    let text = '';
 
     port.on('data', function(data) {
         text += String(data);

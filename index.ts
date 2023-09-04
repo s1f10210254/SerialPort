@@ -73,10 +73,10 @@ port.on('open', function() {
     console.log('ポートが開いた');
 
     
-    // setInterval(()=>{
-    //     run();
-    //     run1()
-    // },1000)
+    setInterval(()=>{
+        run();
+        run1()
+    },1000)
 
     // setTimeout(()=>{
     //     run();
