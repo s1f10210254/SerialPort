@@ -1,36 +1,37 @@
-const message = "前に５０センチ進む"
+const message = "前に50センチ進む"
 
-function containsPattern(str: string, pattern: string): boolean{
+function containsDirectPattern(str: string, pattern: string): boolean{
     return str.includes(pattern);
 }
 
-function removeBeroreCentimeters(input: string):string | null{
-    const regex = /(\S+)\s*センチ/g;
+function removeNumverBeroreCentimeters(input: string):number | null{
+    const regex = /(\d+)\s*センチ/g;
     const match = regex.exec(input);
     if(match){
-        const wordBeforeCentimeters = match[1].trim();
-        return wordBeforeCentimeters;
+        const numberBeforeCentimeters = parseInt(match[1],10);
+        return numberBeforeCentimeters;
     }else{
         return null;
     };
 };
 
-const extractedCentimetersWord = removeBeroreCentimeters(message);
+// function speedBinari(input:number):string | null {
+//     const 
+// }
+
+const extractedCentimetersWord = removeNumverBeroreCentimeters(message);
+console.log("cm",extractedCentimetersWord)
 
 
-
-let result = ""
+let result = "00"
 
 const inputString = message;
 const forward_word = "前";
 const back_word = "後";
-const speed_word = "センチ"
 
-if(containsPattern(inputString, forward_word)){
-    console.log("前に進む")
-    if(containsPattern(inputString,speed_word)){
-        
-    }
-}else if(containsPattern(inputString, back_word)){
+
+if(containsDirectPattern(inputString, forward_word)){
+    
+}else if(containsDirectPattern(inputString, back_word)){
     console.log("後ろに進む")
 }
