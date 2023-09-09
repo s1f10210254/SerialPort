@@ -56,7 +56,7 @@ port.on('open',()=>{
     console.log('ポートが開いた');
 
     toggleLED();
-    
+
     setInterval(toggleLED, 5000);
 })
 
@@ -67,3 +67,8 @@ port.on('open',()=>{
 // port.on('error', (err)=>{
 //     console.log('エラー:',err);
 // })
+
+
+//デジタルメッセージ
+//8bit ON
+//

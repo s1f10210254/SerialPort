@@ -1,4 +1,4 @@
-import {firmata} from "firmata"
+// import {firmata} from "firmata"
 
-const firmata = require('firmata');
-const board = new firmata.Board("")
+// const firmata = require('firmata');
+// const board = new firmata.Board("")
