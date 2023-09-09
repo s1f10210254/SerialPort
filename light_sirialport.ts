@@ -1,7 +1,7 @@
 import { SerialPort } from "serialport";
 
 const path = 'COM4'
-const port = new SerialPort({path, baudRate:9600});
+const port = new SerialPort({path, baudRate:57600});
 
 const run = () =>{
 
