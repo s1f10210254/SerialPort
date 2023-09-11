@@ -110,7 +110,8 @@ port.on('open', ()=>{
 
                         //次のセットへ進む
                         setIndex ++;
-                        sendNextSet();
+                        // sendNextSet();
+                        setTimeout(sendNextSet,100)
                     });
                 });
             
