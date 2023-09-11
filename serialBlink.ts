@@ -20,6 +20,20 @@ const toggleLED = () =>{
     })
 }
 
+// const run = ()=>{
+//     for (let i = 0; i < array.length; i++) {
+//         const element = array[i];
+        
+//     }
+//     let data = ''
+//     port.write(data, (err)=>{
+//         if(err){
+//             return console.log("送信失敗", err.message);
+//         }
+//         console.log("つけ！！！！！！")
+//     })
+// }
+
 
 // port.on("open", ()=>{
 //     console.log('ポートが開いた');
@@ -72,3 +86,7 @@ port.on('open',()=>{
 //デジタルメッセージ
 //8bit ON
 //
+
+port.on('open', ()=>{
+    
+})
