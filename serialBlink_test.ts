@@ -1,26 +1,35 @@
-import { SerialPort } from "serialport";
+import { SerialPort, ReadlineParser } from "serialport";
+
 
 
 const path = "COM4"
 
 const port = new SerialPort({path, baudRate:57600});
 
+const parser = port.pipe(new ReadlineParser({ delimiter: '\n'}));
+
 port.on('open', () => {
     console.log('Arduino connected');
+    sendAllCombinations();
+});
+
+
+function sendDigitalMessage(pin:number, value:number){
+    const command = 0x9D;
+    const portNumber = pin <= 7 ? 0x90 : 0x98;
+    const data = [command | (pin % 8), value];
+    const message = [command, ...data]
+
+    port.write(message);
+    console.log(`Sent: 0x${command.toString(16)} 0x${data[0].toString(16)} 0x${data[1].toString(16)}`);
+}
+   
   
-    // 上位1バイト（種別コード）の全通りを送信
-    for (let command = 0x90; command <= 0x9F; command++) {
-      sendDigitalMessage(13, command, 1); // 下位1バイトを1（ON）で固定
-      sendDigitalMessage(13, command, 0); // 下位1バイトを0（OFF）で固定
-    }
-  });
-  
-  function sendDigitalMessage(pin: number, command: number, value: number) {
-    const data = [command, value];
-    port.write(data, (err) => {
-      if (err) {
-        return console.log('Error:', err.message);
+function sendAllCombinations() {
+    for (let upperByte = 0; upperByte <= 0x7F; upperByte++) {
+      for (let lowerByte = 0; lowerByte <= 1; lowerByte++) {
+        const value = (upperByte << 1) | lowerByte;
+        sendDigitalMessage(13, value);
       }
-      console.log(`Sent to pin ${pin}, command ${command.toString(16)}: ${data.map(byte => byte.toString(16)).join(' ')}`);
-    });
+    }
   }
