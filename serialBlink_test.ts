@@ -8,7 +8,8 @@ const path = "COM4"
 
 const port = new SerialPort({path, baudRate:57600});
 
-const parser = port.pipe(new ReadlineParser({ delimiter: '\n'}));
+const parser = new ReadlineParser()
+// const parser = port.pipe(new ReadlineParser({ delimiter: '\n'}));
 
 const identifierCode = 0x9D;
 const upperByteValues = [...Array(128).keys()]; // 0から127の上位バイトの値
@@ -73,6 +74,9 @@ console.log(Buffer.from([identifierCode]))
 //         })
 //     })
 // })
+// port.on('data', (data)=>{
+//     console.log(`Arduinoからのデータ: ${Buffer.from([data])}`);
+// })
 
 port.on('open', ()=>{
     console.log('Arduino connected');
@@ -111,6 +115,8 @@ port.on('open', ()=>{
                         //次のセットへ進む
                         setIndex ++;
                         // sendNextSet();
+                        parser.on('data', console.log)
+
                         setTimeout(sendNextSet,100)
                     });
                 });
