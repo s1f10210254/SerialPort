@@ -13,6 +13,8 @@ const setPinToOutput = [0xF4, 0x0D, 0x01];
 const setPinHigh = [0x90, 0x20, 0x00];
 const setPinLow = [0x90, 0x00, 0x00];
 
+let isLedOn = false;
+
 // 初期設定（ピンを出力に設定）
 port.write(Buffer.from(setPinToOutput), (err) => {
   if (err){ 
@@ -23,13 +25,14 @@ port.write(Buffer.from(setPinToOutput), (err) => {
 
 // LEDの点滅（Lチカ）を行う
 setInterval(() => {
+  isLedOn = !isLedOn
   // LEDの状態取得（条件演算子、三項演算子）
   const ledState = port.isOpen ? setPinLow : setPinHigh;
 
   // LEDのオン・オフを切り替える
   port.write(Buffer.from(ledState), err => {
     if (err) {return console.error("Error writing to port:", err.message);}
-    console.log(`sent LED ${port.isOpen ? 'LOW:' + setPinLow : 'HIGH' + setPinHigh}`)
+    console.log(`sent LED ${isLedOn ? 'HIGH' : 'LOW'}`)
   });
 }, 1000); // 切り替え間隔（ミリ秒）
 

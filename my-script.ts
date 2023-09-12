@@ -7,11 +7,7 @@ const path = 'COM4'; // Arduinoのシリアルポートを指定してくださ�
 // const baudRate = 57600; // Arduinoとの通信速度に合わせて変更してください
 
 
-const serialPort = new SerialPort(COM4, {
-  baudRate:57600,
-  // parser: new ReadlineParser()
-});
-
+const serialPort = new SerialPort({path, baudRate:57600})
 
 
 
