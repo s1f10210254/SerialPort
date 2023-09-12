@@ -1,42 +1,32 @@
 import { SerialPort } from "serialport";
+import { setInterval } from "timers";
 
-const port = new SerialPort({
-    path: 'COM4',
-    baudRate: 57600,
-    autoOpen:true,
-})
+const path = "COM4";
+const port = new SerialPort({path, baudRate: 57600});
 
-const pinNumber = 0x0d;
-const setPinToOutput = [0xF4, pinNumber, 0x01];
-const setPinHigh = [0x90, pinNumber, 0x01];
-const setPinLow = [0x90, pinNumber, 0x00];
+const identifierCode = 0x90;  // Digital I/O message for pins 0-6
+const pinNumber = 13;  // LED is connected to pin 13
+const value = 1;  // HIGH
 
-let isLedOn = false;
-
-port.on('open', err => {
-    if (err) {
-      return console.error("Error on port open:", err.message);
-    }
-    port.write(Buffer.from(setPinToOutput), err =>  {
-      if (err) {
-        return console.error("Error setting pin mode:", err.message);
-      }
-      console.log(`Sent Output 0x${setPinToOutput.join(' ')}`);
-  
-      setInterval(() => {
-        isLedOn = !isLedOn;
-        const ledState = isLedOn ? setPinHigh : setPinLow;
-  
-        port.write(Buffer.from(ledState), err => {
-          if (err) {
-            return console.error("Error writing to port:", err.message);
-          }
-          console.log(`Sent LED ${isLedOn ? 'HIGH' : 'LOW'}`);
+const run = ()=>{
+        // Create the message
+        const buffer = Buffer.from([identifierCode + (pinNumber >> 3), (1 << (pinNumber & 0x07)) * value, 0x00]);
+    
+        // Send the message to turn on the LED
+        port.write(buffer, (err) => {
+            if (err) {
+                return console.error('Error writing to port: ', err.message);
+            }
+            console.log(`Sent message to turn on LED at pin ${pinNumber}`);
         });
-      }, 1000); 
-    });
-  });
-  
-  port.on('error', err => {
-    console.error('Error: ', err.message);
-  });
+}
+
+port.on('open', () => {
+    console.log('Arduino connected');
+    setInterval(run,1000)
+
+});
+
+port.on('error', (err) => {
+    console.error('Error: ', err);
+});
