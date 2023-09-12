@@ -13,7 +13,8 @@ const parser = new ReadlineParser()
 
 const identifierCode = 0x9D;
 const upperByteValues = [...Array(128).keys()]; // 0から127の上位バイトの値
-const lowerByteValues = [0x00, 0x01]; // 下位バイトの値
+// const lowerByteValues = [0x00, 0x01]; // 下位バイトの値
+const lowerByteValues = [...Array(128).keys()]
 
 console.log(Buffer.from([identifierCode]))
 
