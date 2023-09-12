@@ -21,11 +21,11 @@ port.on('open', ()=>{
         setInterval(()=>{
             isLedOn = !isLedOn;
             if(isLedOn){
-                const ledOnMessage = Buffer.from([0x9D, 0x20, 0x00]);
+                const ledOnMessage = Buffer.from([0x90, 0x20, 0x00]);
                 port.write(ledOnMessage);
                 console.log(`High`)
             }else{
-                const ledOffMessage = Buffer.from([0x9D, 0x00, 0x00]);
+                const ledOffMessage = Buffer.from([0x90, 0x00, 0x00]);
                 port.write(ledOffMessage);
                 console.log(`Low`)
             }

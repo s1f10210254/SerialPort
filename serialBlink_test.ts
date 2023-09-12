@@ -11,7 +11,7 @@ const port = new SerialPort({path, baudRate:57600});
 const parser = new ReadlineParser()
 // const parser = port.pipe(new ReadlineParser({ delimiter: '\n'}));
 
-const identifierCode = 0x9D;
+const identifierCode = 0x90;
 const upperByteValues = [...Array(128).keys()]; // 0から127の上位バイトの値
 // const lowerByteValues = [0x00, 0x01]; // 下位バイトの値
 const lowerByteValues = [...Array(128).keys()]
