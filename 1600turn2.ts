@@ -46,7 +46,7 @@ port.on('open', () => {
 
                         // 次のセットへ進む
                         setIndex++;
-                        setTimeout(sendNextSet, 100);
+                        setTimeout(sendNextSet, 0.0001);
                     });
                 });
             });

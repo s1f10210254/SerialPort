@@ -115,7 +115,7 @@ port.on('open', ()=>{
                         //次のセットへ進む
                         setIndex ++;
                         // sendNextSet();
-                        parser.on('data', console.log)
+                        // parser.on('data', console.log)
 
                         setTimeout(sendNextSet,100)
                     });

@@ -1,53 +1,53 @@
-// import { error } from "console";
-// import { SerialPort } from "serialport";
+import { error } from "console";
+import { SerialPort } from "serialport";
 
-// const path = 'COM4';
-// const port = new SerialPort({path, baudRate:57600});
+const path = 'COM4';
+const port = new SerialPort({path, baudRate:57600});
 
-// const identifierCode = [...Array(256).keys()]
-// const upperByteValues = [...Array(256).keys()]
-// const lowerByteValues = [...Array(256).keys()]
+const identifierCode = [...Array(256).keys()]
+const upperByteValues = [...Array(256).keys()]
+const lowerByteValues = [...Array(256).keys()]
 
 
-// // port.on('open' ,()=>{
-// //     console.log('Serial port opend');
-// //     let setIndex = 0
-// //     const sendNextSet = ()=>{
-// //     for(let identifier = 0x00; identifier <= 0xFF; identifier++){
-// //         port.write(Buffer.from([identifier]), (err)=>{
-// //             if(err){
-// //                 console.error('Error writing te serial port identifer',err)
-// //             }
-// //             console.log(`sent identifier: 0x${identifier.toString(16)}`)
-// //             for(let upperByte = 0x00; upperByte <= 0xFF; upperByte++){
-// //                 port.write(Buffer.from([upperByte]), (err)=>{
-// //                     if(err){
-// //                         console.error('Error writing to serial port upperByte',err);
-// //                     }
-// //                     console.log(`sent upperByte:  0x${upperByte.toString(16)}`);
+port.on('open' ,()=>{
+    console.log('Serial port opend');
+    let setIndex = 0
+    const sendNextSet = ()=>{
+        for(let identifier = 0x00; identifier <= 0xFF; identifier++){
+            port.write(Buffer.from([identifier]), (err)=>{
+                if(err){
+                    console.error('Error writing te serial port identifer',err)
+                }
+                console.log(`sent identifier: 0x${identifier.toString(16)}`)
+                for(let upperByte = 0x00; upperByte <= 0xFF; upperByte++){
+                    port.write(Buffer.from([upperByte]), (err)=>{
+                        if(err){
+                            console.error('Error writing to serial port upperByte',err);
+                        }
+                        console.log(`sent upperByte:  0x${upperByte.toString(16)}`);
     
-// //                     for(let lowerByte = 0x00; lowerByte <= 0xFF; lowerByte){
-// //                         port.write(Buffer.from([lowerByte]),(err)=>{
-// //                             if(err){
-// //                                 console.error('Error writing to serial port lowerByte', err)
-// //                             }
-// //                             console.log(`sent lowerByte: 0x${lowerByte.toString(16)}`)
+                        for(let lowerByte = 0x00; lowerByte <= 0xFF; lowerByte){
+                            port.write(Buffer.from([lowerByte]),(err)=>{
+                                if(err){
+                                    console.error('Error writing to serial port lowerByte', err)
+                                }
+                                console.log(`sent lowerByte: 0x${lowerByte.toString(16)}`)
 
-// //                             setIndex++;
+                                setIndex++;
 
-// //                             setTimeout(sendNextSet,100)
-// //                         })
+                                setTimeout(sendNextSet,100)
+                            })
                         
-// //                     }
-// //                 })
+                        }
+                    })
                 
-// //             }
+                }
             
-// //         })
-// //     }
-// // }
-// //     sendNextSet()
-// // })
+            })
+        }
+    }
+    sendNextSet()
+})
 
 // port.on('open', ()=>{
 //     console.log('Arduino connected');
@@ -98,10 +98,10 @@
 //     sendNextSet()
 // })
 
-// port.on('error', (err)=>{
-//     console.log('Serial port error:', err);
-// })
+port.on('error', (err)=>{
+    console.log('Serial port error:', err);
+})
 
-// port.on('close', ()=>{
-//     console.log('Serial port closed');
-// })
+port.on('close', ()=>{
+    console.log('Serial port closed');
+})
