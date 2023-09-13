@@ -1,47 +1,62 @@
-import { resolve } from "path";
-import { SerialPort,ReadlineParser } from "serialport";
+import { SerialPort } from "serialport";
 
-const path = 'COM4';
+const path = "COM4";
 const port = new SerialPort({path, baudRate:57600});
-const parser = new ReadlineParser();
 
+const identifierCode = 0x90;
+const pinNumber = 13;
+const value = 1;
+
+const servoPin = 13;
+
+// SYSEX-related constants
+const SYSEX_STAET = 0xF0;
+const SYSEX_END = 0xF7;
 const SERVO_CONFIG = 0x70;
 
-const servoPin = 9;
-
-function setServoAngle(pin:number, angle:number){
-    //アナログメッセージを使用してサーボ角度を設定
-    const buffer = Buffer.from([0xE0 + pin, angle & 0x7F, angle >> 7]);
-    port.write(buffer,(err)=>{
-        if(err){
-            return console.error('Error writing to port: ', err.message)
+// Setup servo for control
+const setupServo = ()=>{
+    const buffer = Buffer.from([SYSEX_STAET,SYSEX_END,SERVO_CONFIG]);
+    port.write(buffer, (err)=>{
+        if (err){
+            return console.error('Error: ',err.message)
         }
-        console.log(`Sent ${pin}pin Servo ${angle}`)
+        console.log(`Sent message to setupServo`)
     });
+};
+
+//Control servo angle
+const setServoAngle = (angle: number)=>{
+    const buffer = Buffer.from([0xE0 + servoPin, angle & 0x7F,(angle >> 7) & 0x7F])
+    port.write(buffer, (err)=>{
+        if(err){
+            return console.error(`Erro:`,err.message)
+        }
+        console.log(`Sent message to setupServoAngle ${angle}`)
+    })
 }
 
-async function delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve,ms));
+const run = ()=>{
+    //LED control
+    const buffer = Buffer.from([identifierCode + (pinNumber >> 3), (1 << (pinNumber & 0x07)) * value, 0x00]);
+    port.write(buffer,(err)=>{
+        if (err) {
+            return console.error('Error writing to port: ', err.message);
+        }
+        console.log(`Sent message to turn on LED at pin ${pinNumber}`);
+    })
+
+    //Servo control
+    setServoAngle(90);
 }
 
-port.on('open', async()=>{
+port.on('open', ()=>{
     console.log('Arduino connected');
 
-    let buffer = Buffer.from([SERVO_CONFIG, servoPin, 0x00, 0x00]);
-    port.write(buffer);
-    await delay(50);
-    setInterval(async()=>{
-        setServoAngle(servoPin, 90);
-        await delay(50)
-    },1000)
-})
-
-
-
-parser.on('data', (data) =>{
-    console.log(`Received: ${data}`)
+    setupServo();
+    setInterval(run, 1000);
 })
 
 port.on('error', (err)=>{
-    console.log('Error: ', err)
+    console.error('Error: ', err)
 })
